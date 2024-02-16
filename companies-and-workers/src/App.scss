@@ -1,0 +1,10 @@
+@import "./colors";
+body {
+  margin: 15px;
+}
+.App {
+  display: flex;
+  justify-content: stretch;
+  border: 2px solid $app--Border;
+  border-radius: 10px;
+}
