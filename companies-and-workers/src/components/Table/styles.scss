@@ -1,3 +1,11 @@
 .table {
   text-align: left;
+
+  &__title {
+    text-align: center;
+  }
+
+  &__header {
+    padding-left: 11px;
+  }
 }
