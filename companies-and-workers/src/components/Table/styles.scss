@@ -1,5 +1,11 @@
+@import "../../colors";
 .table {
   text-align: left;
+  padding: 5px;
+  flex-grow: 1;
+  border-color: transparent;
+  border-width: 1px;
+  border-style: solid;
 
   &__title {
     text-align: center;
@@ -7,5 +13,23 @@
 
   &__header {
     padding-left: 11px;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+    border-bottom-color: $table__header--BorderBottom;
+    margin-bottom: 15px;
   }
+  &.active {
+    border-radius: 10px 0 0 10px;
+    border-color: $table-active--Border;
+    border-style: solid;
+  }
+}
+
+.table + .table {
+  border-color: $table--Border;
+  border-left: 1px solid;
+}
+.table + .table.active {
+  border-color: $table-active--Border;
+  border-radius: 0 10px 10px 0;
 }
