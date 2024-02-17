@@ -16,3 +16,16 @@ export interface IActiveTables {
   CompaniesTable?: boolean;
   WorkersTable?: boolean;
 }
+
+export interface IEmployee {
+  id: number;
+  name: string;
+  surname: string;
+  position: string;
+}
+
+export interface ICompany {
+  id: number;
+  name: string;
+  staff: IEmployee[];
+}
