@@ -1,13 +1,45 @@
 import React from "react";
 import Table from "../Table";
+import { ICompany, IRow } from "../../interfaces";
+import { useActions } from "../../hooks/useActions";
 
 export default function WorkersTable({
+  checkedCompanies,
   className = "",
   onClick = () => {},
 }: {
+  checkedCompanies: ICompany[];
   className?: string;
   onClick?: (e?: any) => void;
 }) {
+  const { toggleCheckedEmployee } = useActions();
+  let rows: IRow[] = [];
+  checkedCompanies.forEach((company) => {
+    rows.push({
+      id: `${company.id}`,
+      properties: [
+        { value: company.name },
+        { value: `${company.staff.length} сотрудников` },
+        { value: company.adress },
+      ],
+      isListHead: true,
+    });
+
+    company.staff.forEach((employee) =>
+      rows.push({
+        id: `${company.id}.${employee.id}`,
+        properties: [
+          { value: employee.name, func: employee.changeName },
+          { value: employee.surname, func: employee.changeSurname },
+          { value: employee.position, func: employee.changePosition },
+        ],
+        isChecked: employee.isChecked,
+        onChange: () => {
+          toggleCheckedEmployee(employee);
+        },
+      })
+    );
+  });
   return (
     <Table
       className={className}
@@ -15,29 +47,7 @@ export default function WorkersTable({
         onClick();
       }}
       title="Список сотрудников"
-      rows={[
-        {
-          id: 1,
-          isListHead: true,
-          properties: [{ value: "Рога и копыта" }],
-        },
-        {
-          id: 2,
-          properties: [
-            { value: "Вася" },
-            { value: "Пупкин" },
-            { value: "программатор" },
-          ],
-        },
-        {
-          id: 4,
-          properties: [
-            { value: "Зуб" },
-            { value: "Пердолович" },
-            { value: "Биг босс" },
-          ],
-        },
-      ]}
+      rows={rows}
     />
   );
 }

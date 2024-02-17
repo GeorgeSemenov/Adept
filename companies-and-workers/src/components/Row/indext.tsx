@@ -2,16 +2,15 @@ import { IRow } from "../../interfaces";
 import { Checkbox } from "@mui/material";
 import React from "react";
 import "./styles.scss";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function Row({
   isChecked = false,
   className = "",
   properties,
   isListHead = false,
+  onChange = () => {},
 }: IRow) {
   className += isListHead ? "table__row_theme_head-list" : "";
-  const dispatch = useDispatch();
   return (
     <div className={`table__row ${className}`}>
       {!isListHead && (
@@ -19,7 +18,7 @@ export default function Row({
           checked={isChecked}
           className="table__row-checkbox"
           onChange={() => {
-            dispatch(actions.toggle);
+            onChange();
           }}
         />
       )}

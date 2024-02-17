@@ -1,13 +1,18 @@
 import React from "react";
 import Table from "../Table";
+import { ICompany } from "../../interfaces";
+import { useActions } from "../../hooks/useActions";
 
 export default function CompaniesTable({
+  companies,
   className = "",
   onClick = () => {},
 }: {
+  companies: ICompany[];
   className?: string;
   onClick?: (e?: any) => void;
 }) {
+  const { toggleCheckedCompanies } = useActions();
   return (
     <Table
       className={className}
@@ -15,24 +20,18 @@ export default function CompaniesTable({
         onClick();
       }}
       title="Список компаний"
-      rows={[
-        {
-          id: 2,
-          properties: [
-            { value: "Рога и копыта" },
-            { value: "156 сотрудников" },
-            { value: "улица пушкина дом калатушкина" },
-          ],
+      rows={companies.map((company) => ({
+        id: `${company.id}`,
+        properties: [
+          { value: company.name, func: company.changeNameFunc },
+          { value: `${company.staff.length} сотрудников` },
+          { value: company.adress, func: company.changeAdressFunc },
+        ],
+        onChange: () => {
+          toggleCheckedCompanies(company);
         },
-        {
-          id: 4,
-          properties: [
-            { value: "вторая компания" },
-            { value: "1 сотрудник" },
-            { value: "Где то там" },
-          ],
-        },
-      ]}
+        isChecked: company.isChecked,
+      }))}
     />
   );
 }

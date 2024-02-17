@@ -1,8 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { reducer as checkedCompaniesReducer } from "./checkedCompanies/checkedCompanies";
+import { reducer as companiesReducer } from "./companies/companies";
 
 const reducers = combineReducers({
-  checkedCompaines: checkedCompaniesReducer,
+  companies: companiesReducer,
 });
 
 export const store = configureStore({
