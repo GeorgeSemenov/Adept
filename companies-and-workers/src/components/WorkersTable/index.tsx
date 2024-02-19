@@ -12,7 +12,10 @@ export default function WorkersTable({
   className?: string;
   onClick?: (e?: any) => void;
 }) {
-  const { toggleCheckedEmployee } = useActions();
+  const {
+    toggleCheckedEmployee,
+    setCheckStatusAllWorkersFromCheckedCompanies,
+  } = useActions();
   let rows: IRow[] = [];
   checkedCompanies.forEach((company) => {
     rows.push({
@@ -23,6 +26,7 @@ export default function WorkersTable({
         { value: company.adress },
       ],
       isListHead: true,
+      isChecked: true,
     });
 
     company.staff.forEach((employee) =>
@@ -45,6 +49,11 @@ export default function WorkersTable({
       className={className}
       onClick={() => {
         onClick();
+      }}
+      onChange={(checkStatus) => {
+        if (checkStatus) {
+          setCheckStatusAllWorkersFromCheckedCompanies(checkStatus);
+        }
       }}
       title="Список сотрудников"
       rows={rows}

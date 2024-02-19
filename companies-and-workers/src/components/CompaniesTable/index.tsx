@@ -12,10 +12,15 @@ export default function CompaniesTable({
   className?: string;
   onClick?: (e?: any) => void;
 }) {
-  const { toggleCheckedCompanies } = useActions();
+  const { toggleCheckedCompanies, setCheckStatusAllCompanies } = useActions();
   return (
     <Table
       className={className}
+      onChange={(checkStatus) => {
+        if (checkStatus !== undefined) {
+          setCheckStatusAllCompanies(checkStatus);
+        }
+      }}
       onClick={() => {
         onClick();
       }}

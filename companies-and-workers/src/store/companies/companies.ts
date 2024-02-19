@@ -6,6 +6,12 @@ export const companies = createSlice({
   name: "companies",
   initialState: companiesInitialValue.companies,
   reducers: {
+    setCheckStatusAllCompanies: (
+      state: ICompany[],
+      { payload: checkStatus }: { payload: boolean }
+    ) => {
+      state.forEach((company) => (company.isChecked = checkStatus));
+    },
     toggleCheckedCompanies: (
       state: ICompany[],
       { payload }: { payload: ICompany }
@@ -25,6 +31,15 @@ export const companies = createSlice({
       );
       state[companyIndex].staff[employeeIndex].isChecked =
         !state[companyIndex].staff[employeeIndex].isChecked;
+    },
+    setCheckStatusAllWorkersFromCheckedCompanies: (
+      state: ICompany[],
+      { payload: checkStatus }: { payload: boolean }
+    ) => {
+      const allCheckedCompanies = state.filter((company) => company.isChecked);
+      allCheckedCompanies.forEach((company) => {
+        company.staff.forEach((employee) => (employee.isChecked = checkStatus));
+      });
     },
   },
 });
