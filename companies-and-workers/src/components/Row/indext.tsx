@@ -8,12 +8,19 @@ export default function Row({
   className = "",
   properties,
   isListHead = false,
+  onChange = () => {},
 }: IRow) {
   className += isListHead ? "table__row_theme_head-list" : "";
   return (
     <div className={`table__row ${className}`}>
       {!isListHead && (
-        <Checkbox checked={isChecked} className="table__row-checkbox" />
+        <Checkbox
+          checked={isChecked}
+          className="table__row-checkbox"
+          onChange={() => {
+            onChange();
+          }}
+        />
       )}
       <div className="table__row-data">
         {properties.map((prop, key) =>
