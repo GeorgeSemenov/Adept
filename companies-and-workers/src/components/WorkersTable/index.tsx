@@ -51,7 +51,7 @@ export default function WorkersTable({
         onClick();
       }}
       onChange={(checkStatus) => {
-        if (checkStatus) {
+        if (checkStatus !== undefined) {
           setCheckStatusAllWorkersFromCheckedCompanies(checkStatus);
         }
       }}
