@@ -7,9 +7,10 @@ export interface IRow {
   onChange?: () => void;
 }
 
-interface IRowProperty {
+export interface IRowProperty {
   value: string;
   func?: (arg: string) => void;
+  key?: number;
 }
 
 export interface IActiveTables {

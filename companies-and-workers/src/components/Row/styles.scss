@@ -17,6 +17,10 @@
     display: inline-block;
   }
 
+  &-property-container {
+    margin-right: 5px;
+  }
+
   &:last-child {
     margin-bottom: 0px;
     border-bottom-width: 0px;
