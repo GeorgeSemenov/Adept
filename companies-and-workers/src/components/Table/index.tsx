@@ -3,7 +3,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import React, { useEffect, useState } from "react";
 import Row from "../Row/indext";
 import "./styles.scss";
-import { IRow } from "../../interfaces";
+import { ICreateButtonRow, IRow, isIRow } from "../../interfaces";
 
 export default function Table({
   title,
@@ -13,7 +13,7 @@ export default function Table({
   onChange = () => {},
 }: {
   title: string;
-  rows: IRow[];
+  rows: (IRow | ICreateButtonRow)[];
   className?: string;
   onClick?: () => void;
   onChange?: (arg?: boolean) => void;
@@ -49,15 +49,19 @@ export default function Table({
         />
       </div>
       <div className="table__rows">
-        {rows.map((row) => (
-          <Row key={row.id} {...row} />
-        ))}
+        {rows.map((row) => {
+          if (isIRow(row)) {
+            return <Row key={row.id} {...row} />;
+          } else {
+            return <span>тут будет кнопочка добавления сущностей!</span>;
+          }
+        })}
       </div>
     </div>
   );
 }
 
-function isAllRowsChecked(rows: IRow[]) {
+function isAllRowsChecked(rows: (IRow | ICreateButtonRow)[]) {
   let isAllRChecked = true;
   for (const row of rows) {
     if (!row.isChecked) {

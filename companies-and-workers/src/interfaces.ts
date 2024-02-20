@@ -7,10 +7,19 @@ export interface IRow {
   onChange?: () => void;
 }
 
+export function isIRow(obj: any): obj is IRow {
+  return obj && typeof obj === "object" && "id" in obj && "properties" in obj;
+}
+
 export interface IRowProperty {
   value: string;
   func?: (arg: string) => void;
   key?: number;
+}
+
+export interface ICreateButtonRow {
+  createButtonText: string;
+  isChecked?: boolean;
 }
 
 export interface IActiveTables {

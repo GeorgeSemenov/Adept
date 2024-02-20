@@ -6,6 +6,21 @@ export const companies = createSlice({
   name: "companies",
   initialState: companiesInitialValue.companies,
   reducers: {
+    addCompany: (
+      state: ICompany[],
+      {
+        payload: { companyName, companyAddress },
+      }: { payload: { companyName: string; companyAddress: string } }
+    ) => {
+      const lastId = state[state.length - 1].id;
+      const newCompany: ICompany = {
+        adress: companyAddress,
+        id: lastId + 1,
+        name: companyName,
+        staff: [],
+      };
+      state.push(newCompany);
+    },
     setCheckStatusAllCompanies: (
       state: ICompany[],
       { payload: checkStatus }: { payload: boolean }
@@ -47,6 +62,30 @@ export const companies = createSlice({
       );
       state[companyIndex].staff[employeeIndex].isChecked =
         !state[companyIndex].staff[employeeIndex].isChecked;
+    },
+    addEmployee: (
+      state: ICompany[],
+      {
+        payload: { companyID, name, surname, position },
+      }: {
+        payload: {
+          companyID: number;
+          name: string;
+          surname: string;
+          position: string;
+        };
+      }
+    ) => {
+      const staff = findRightCompanyById(state, companyID).staff;
+      const lastId = staff[staff.length - 1].id;
+      const newEmployee: IEmployee = {
+        companyId: companyID,
+        id: lastId + 1,
+        name: name,
+        surname: surname,
+        position: position,
+      };
+      staff.push(newEmployee);
     },
     setNameEmployee: (
       state: ICompany[],

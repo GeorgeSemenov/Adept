@@ -1,6 +1,6 @@
 import React from "react";
 import Table from "../Table";
-import { ICompany, IRow } from "../../interfaces";
+import { ICompany, ICreateButtonRow, IEmployee, IRow } from "../../interfaces";
 import { useActions } from "../../hooks/useActions";
 
 export default function WorkersTable({
@@ -19,8 +19,8 @@ export default function WorkersTable({
     setSurnameEmployee,
     setPositionEmployee,
   } = useActions();
-  let rows: IRow[] = [];
-  checkedCompanies.forEach((company) => {
+  let rows: (IRow | ICreateButtonRow)[] = [];
+  checkedCompanies.forEach((company: ICompany) => {
     rows.push({
       id: `${company.id}`,
       properties: [
@@ -32,7 +32,7 @@ export default function WorkersTable({
       isChecked: true,
     });
 
-    company.staff.forEach((employee) =>
+    company.staff.forEach((employee: IEmployee) => {
       rows.push({
         id: `${company.id}.${employee.id}`,
         properties: [
@@ -71,8 +71,10 @@ export default function WorkersTable({
         onChange: () => {
           toggleCheckedEmployee(employee);
         },
-      })
-    );
+      });
+      const createButtonRow: ICreateButtonRow = { createButtonText: "sdf" };
+      rows.push(createButtonRow);
+    });
   });
   return (
     <Table

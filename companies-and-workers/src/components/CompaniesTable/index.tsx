@@ -1,6 +1,6 @@
 import React from "react";
 import Table from "../Table";
-import { ICompany } from "../../interfaces";
+import { ICompany, ICreateButtonRow, IRow } from "../../interfaces";
 import { useActions } from "../../hooks/useActions";
 
 export default function CompaniesTable({
@@ -18,6 +18,38 @@ export default function CompaniesTable({
     setCompanyName,
     setCompanyAdres,
   } = useActions();
+  const rows: (IRow | ICreateButtonRow)[] = companies.map((company) => ({
+    id: `${company.id}`,
+    properties: [
+      {
+        value: company.name,
+        func: (newName: string) => {
+          setCompanyName({
+            companyId: company.id,
+            newCompanyName: newName,
+          });
+        },
+      },
+      { value: `${company.staff.length} сотрудников` },
+      {
+        value: company.adress,
+        func: (newAddress: string) => {
+          setCompanyAdres({
+            companyId: company.id,
+            newCompanyAddress: newAddress,
+          });
+        },
+      },
+    ],
+    onChange: () => {
+      toggleCheckedCompanies(company);
+    },
+    isChecked: company.isChecked,
+  }));
+  const createButtonRow: ICreateButtonRow = {
+    createButtonText: "просто ты гей, а ещё это кнопка добавления сущности",
+  };
+  rows.push(createButtonRow);
   return (
     <Table
       className={className}
@@ -30,34 +62,7 @@ export default function CompaniesTable({
         onClick();
       }}
       title="Список компаний"
-      rows={companies.map((company) => ({
-        id: `${company.id}`,
-        properties: [
-          {
-            value: company.name,
-            func: (newName: string) => {
-              setCompanyName({
-                companyId: company.id,
-                newCompanyName: newName,
-              });
-            },
-          },
-          { value: `${company.staff.length} сотрудников` },
-          {
-            value: company.adress,
-            func: (newAddress: string) => {
-              setCompanyAdres({
-                companyId: company.id,
-                newCompanyAddress: newAddress,
-              });
-            },
-          },
-        ],
-        onChange: () => {
-          toggleCheckedCompanies(company);
-        },
-        isChecked: company.isChecked,
-      }))}
+      rows={rows}
     />
   );
 }
