@@ -13,13 +13,15 @@ export default function Table({
   rows,
   className = "",
   onClick = (e?: any) => {},
-  onChange = () => {},
+  onChange,
+  onRemove,
 }: {
   title: string;
   rows: (IRow | ICreateRowPanel)[];
   className?: string;
+  onRemove: () => void;
+  onChange: (arg?: boolean) => void;
   onClick?: () => void;
-  onChange?: (arg?: boolean) => void;
 }) {
   const [isChecked, setIsChecked] = useState(false);
   let [isAllRowsChecked, setIsAllRowsChecked] = useState(false);
@@ -60,6 +62,9 @@ export default function Table({
           size="large"
           disabled={!isOneRowChecked}
           color="primary"
+          onClick={() => {
+            onRemove();
+          }}
         >
           <DeleteIcon fontSize="inherit" />
         </IconButton>

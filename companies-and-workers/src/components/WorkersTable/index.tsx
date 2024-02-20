@@ -19,6 +19,7 @@ export default function WorkersTable({
     setSurnameEmployee,
     setPositionEmployee,
     addEmployee,
+    removeCheckedWorkers,
   } = useActions();
   let rows: (IRow | ICreateRowPanel)[] = [];
   checkedCompanies.forEach((company: ICompany) => {
@@ -27,6 +28,18 @@ export default function WorkersTable({
       properties: [{ value: company.name }],
       isListHead: true,
     });
+
+    if (!company.staff.length) {
+      rows.push({
+        id: `${company.id}.0`,
+        properties: [
+          {
+            value: `В данной компании пока нет ни одного сотрудника.`,
+          },
+        ],
+        isListHead: true,
+      });
+    }
 
     company.staff.forEach((employee: IEmployee) => {
       rows.push({
@@ -93,6 +106,9 @@ export default function WorkersTable({
   return checkedCompanies.length ? (
     <Table
       className={className}
+      onRemove={() => {
+        removeCheckedWorkers();
+      }}
       onClick={() => {
         onClick();
       }}

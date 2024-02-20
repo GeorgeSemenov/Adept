@@ -8,6 +8,9 @@ export const companies = createSlice({
   name: "companies",
   initialState: companiesInitialValue.companies,
   reducers: {
+    removeCheckedCompanies: (state: ICompany[]) => {
+      return state.filter((company) => !company.isChecked);
+    },
     addCompany: (
       state: ICompany[],
       {
@@ -64,6 +67,16 @@ export const companies = createSlice({
       );
       state[companyIndex].staff[employeeIndex].isChecked =
         !state[companyIndex].staff[employeeIndex].isChecked;
+    },
+    removeCheckedWorkers: (state: ICompany[]) => {
+      state.forEach((company) => {
+        if (company.isChecked) {
+          company.staff = company.staff.filter(
+            (employee) => !employee.isChecked
+          );
+        }
+      });
+      return state;
     },
     addEmployee: (
       state: ICompany[],
