@@ -14,7 +14,31 @@
   }
 
   &-data {
-    display: inline-block;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  &-property-container {
+    margin-right: 5px;
+  }
+
+  &-property-name-button.MuiButtonBase-root {
+    text-transform: capitalize;
+  }
+
+  &-property-edit-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-property-edit-form-error {
+    color: red;
+    margin: 5px 0px;
+  }
+
+  &-property-edit-form-input.MuiFormControl-root {
+    margin-bottom: 5px;
   }
 
   &:last-child {

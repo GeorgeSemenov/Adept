@@ -7,9 +7,10 @@ export interface IRow {
   onChange?: () => void;
 }
 
-interface IRowProperty {
+export interface IRowProperty {
   value: string;
   func?: (arg: string) => void;
+  key?: number;
 }
 
 export interface IActiveTables {
@@ -23,9 +24,6 @@ export interface IEmployee {
   name: string;
   surname: string;
   position: string;
-  changeName?: (newName: string) => void;
-  changeSurname?: (newSurName: string) => void;
-  changePosition?: (newPosition: string) => void;
   isChecked?: boolean;
 }
 
@@ -34,7 +32,5 @@ export interface ICompany {
   name: string;
   staff: IEmployee[];
   adress: string;
-  changeNameFunc?: (newName: string) => void;
-  changeAdressFunc?: (newAdress: string) => void;
   isChecked?: boolean;
 }
