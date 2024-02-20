@@ -1,6 +1,6 @@
 import { IRow, IRowProperty } from "../../interfaces";
 import { Checkbox } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import "./styles.scss";
@@ -39,13 +39,17 @@ function RowProperty({ value, func, key }: IRowProperty) {
     <span key={key} className="table__row-property-container">
       {isEditing ? (
         <EditPropertyForm
-          onSubmit={() => {
+          onSubmit={(inputValue) => {
             setIsEditing(false);
+            if (func) {
+              func(inputValue);
+            }
           }}
           defaultValue={value}
         />
       ) : func ? (
         <Button
+          className="table__row-property-name-button"
           key={key}
           variant="outlined"
           onClick={() => {
@@ -67,18 +71,44 @@ function EditPropertyForm({
   onSubmit,
   defaultValue,
 }: {
-  onSubmit: () => void;
+  onSubmit: (inputValue: string) => void;
   defaultValue: string;
 }) {
   const [inputValue, setInputValue] = useState(defaultValue);
+  const [isInputEmpty, setIsInputEmpty] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
   return (
     <form
+      className="table__row-property-edit-form"
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit();
+        if (!inputValue.trim()) {
+          setIsInputEmpty(true);
+        } else {
+          onSubmit(inputValue);
+        }
       }}
     >
-      <TextField id="outlined-basic" value={inputValue} variant="outlined" />
+      <TextField
+        inputRef={inputRef}
+        id="outlined-basic"
+        value={inputValue}
+        variant="outlined"
+        className="table__row-property-edit-form-input"
+        onChange={(e) => {
+          setInputValue(e.target.value);
+        }}
+      />
+      {isInputEmpty && (
+        <span className="table__row-property-edit-form-error">
+          Поле ввода не может быть пустым
+        </span>
+      )}
       <Button type="submit" variant="contained">
         Сохранить
       </Button>

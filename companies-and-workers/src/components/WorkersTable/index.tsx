@@ -15,6 +15,9 @@ export default function WorkersTable({
   const {
     toggleCheckedEmployee,
     setCheckStatusAllWorkersFromCheckedCompanies,
+    setNameEmployee,
+    setSurnameEmployee,
+    setPositionEmployee,
   } = useActions();
   let rows: IRow[] = [];
   checkedCompanies.forEach((company) => {
@@ -33,9 +36,36 @@ export default function WorkersTable({
       rows.push({
         id: `${company.id}.${employee.id}`,
         properties: [
-          { value: employee.name, func: employee.changeName },
-          { value: employee.surname, func: employee.changeSurname },
-          { value: employee.position, func: employee.changePosition },
+          {
+            value: employee.name,
+            func: (newName: string) => {
+              setNameEmployee({
+                companyId: employee.companyId,
+                employeeId: employee.id,
+                newName: newName,
+              });
+            },
+          },
+          {
+            value: employee.surname,
+            func: (newSurname: string) => {
+              setSurnameEmployee({
+                companyId: employee.companyId,
+                employeeId: employee.id,
+                newSurname: newSurname,
+              });
+            },
+          },
+          {
+            value: employee.position,
+            func: (newPosition: string) => {
+              setPositionEmployee({
+                companyId: employee.companyId,
+                employeeId: employee.id,
+                newPosition: newPosition,
+              });
+            },
+          },
         ],
         isChecked: employee.isChecked,
         onChange: () => {

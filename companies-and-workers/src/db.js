@@ -19,9 +19,6 @@ const db = {
           position: "cleaner",
         },
       ],
-      changeNameFunc: () => {
-        console.log("puk");
-      },
       adress: "Russian Federation",
     },
     {

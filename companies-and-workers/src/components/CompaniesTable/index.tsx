@@ -12,7 +12,12 @@ export default function CompaniesTable({
   className?: string;
   onClick?: (e?: any) => void;
 }) {
-  const { toggleCheckedCompanies, setCheckStatusAllCompanies } = useActions();
+  const {
+    toggleCheckedCompanies,
+    setCheckStatusAllCompanies,
+    setCompanyName,
+    setCompanyAdres,
+  } = useActions();
   return (
     <Table
       className={className}
@@ -28,9 +33,25 @@ export default function CompaniesTable({
       rows={companies.map((company) => ({
         id: `${company.id}`,
         properties: [
-          { value: company.name, func: company.changeNameFunc },
+          {
+            value: company.name,
+            func: (newName: string) => {
+              setCompanyName({
+                companyId: company.id,
+                newCompanyName: newName,
+              });
+            },
+          },
           { value: `${company.staff.length} сотрудников` },
-          { value: company.adress, func: company.changeAdressFunc },
+          {
+            value: company.adress,
+            func: (newAddress: string) => {
+              setCompanyAdres({
+                companyId: company.id,
+                newCompanyAddress: newAddress,
+              });
+            },
+          },
         ],
         onChange: () => {
           toggleCheckedCompanies(company);
