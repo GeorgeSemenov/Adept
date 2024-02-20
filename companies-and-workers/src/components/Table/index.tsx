@@ -3,7 +3,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import React, { useEffect, useState } from "react";
 import Row from "../Row/indext";
 import "./styles.scss";
-import { ICreateButtonRow, IRow, isIRow } from "../../interfaces";
+import { ICreateRowPanel, IRow, isIRow } from "../../interfaces";
+import CreateRowPanel from "../CreateRowPanel";
 
 export default function Table({
   title,
@@ -13,7 +14,7 @@ export default function Table({
   onChange = () => {},
 }: {
   title: string;
-  rows: (IRow | ICreateButtonRow)[];
+  rows: (IRow | ICreateRowPanel)[];
   className?: string;
   onClick?: () => void;
   onChange?: (arg?: boolean) => void;
@@ -48,20 +49,20 @@ export default function Table({
           label="Выделить всё"
         />
       </div>
-      <div className="table__rows">
-        {rows.map((row) => {
+      <ul className="table__rows">
+        {rows.map((row, index) => {
           if (isIRow(row)) {
-            return <Row key={row.id} {...row} />;
+            return <Row key={index} {...row} />;
           } else {
-            return <span>тут будет кнопочка добавления сущностей!</span>;
+            return <CreateRowPanel key={index} ruleObj={row} />;
           }
         })}
-      </div>
+      </ul>
     </div>
   );
 }
 
-function isAllRowsChecked(rows: (IRow | ICreateButtonRow)[]) {
+function isAllRowsChecked(rows: (IRow | ICreateRowPanel)[]) {
   let isAllRChecked = true;
   for (const row of rows) {
     if (!row.isChecked) {

@@ -18,6 +18,15 @@
     border-bottom-color: $table__header--BorderBottom;
     margin-bottom: 15px;
   }
+
+  &__rows {
+    padding: 0;
+  }
+
+  &__rows > li {
+    list-style-type: none;
+  }
+
   &.active {
     border-radius: 10px 0 0 10px;
     border-color: $table-active--Border;

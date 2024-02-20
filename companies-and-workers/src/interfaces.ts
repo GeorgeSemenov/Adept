@@ -14,11 +14,12 @@ export function isIRow(obj: any): obj is IRow {
 export interface IRowProperty {
   value: string;
   func?: (arg: string) => void;
-  key?: number;
 }
 
-export interface ICreateButtonRow {
-  createButtonText: string;
+export interface ICreateRowPanel {
+  properties: string[];
+  submitPanelButtonText: string;
+  onSubmit: (obj?: any) => void;
   isChecked?: boolean;
 }
 

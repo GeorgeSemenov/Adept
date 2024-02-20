@@ -1,6 +1,6 @@
 import React from "react";
 import Table from "../Table";
-import { ICompany, ICreateButtonRow, IRow } from "../../interfaces";
+import { ICompany, ICreateRowPanel, IRow } from "../../interfaces";
 import { useActions } from "../../hooks/useActions";
 
 export default function CompaniesTable({
@@ -17,8 +17,9 @@ export default function CompaniesTable({
     setCheckStatusAllCompanies,
     setCompanyName,
     setCompanyAdres,
+    addCompany,
   } = useActions();
-  const rows: (IRow | ICreateButtonRow)[] = companies.map((company) => ({
+  const rows: (IRow | ICreateRowPanel)[] = companies.map((company) => ({
     id: `${company.id}`,
     properties: [
       {
@@ -46,10 +47,20 @@ export default function CompaniesTable({
     },
     isChecked: company.isChecked,
   }));
-  const createButtonRow: ICreateButtonRow = {
-    createButtonText: "просто ты гей, а ещё это кнопка добавления сущности",
+
+  const dumpCompany: ICompany = { adress: "", id: 0, name: "", staff: [] }; //Этот объект создан только для того, чтобы извлечь все свойства интерфейса компании в массив
+  const { staff, id, ...dumpCompanyWithNeededProperties } = dumpCompany; // Удаляем ненужные поля из объекта, например поля staff и id никак не может быть инициализированно через панель создания строк, поэтому её мы удаляем.
+  const propertiesOfCompany = Object.keys(dumpCompanyWithNeededProperties);
+
+  const createRowPanel: ICreateRowPanel = {
+    properties: propertiesOfCompany,
+    onSubmit: (data) => {
+      // console.log(data);
+      addCompany(data);
+    },
+    submitPanelButtonText: "Добавить компанию",
   };
-  rows.push(createButtonRow);
+  rows.push(createRowPanel);
   return (
     <Table
       className={className}

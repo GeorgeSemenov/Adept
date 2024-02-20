@@ -1,6 +1,6 @@
 import React from "react";
 import Table from "../Table";
-import { ICompany, ICreateButtonRow, IEmployee, IRow } from "../../interfaces";
+import { ICompany, ICreateRowPanel, IEmployee, IRow } from "../../interfaces";
 import { useActions } from "../../hooks/useActions";
 
 export default function WorkersTable({
@@ -18,8 +18,9 @@ export default function WorkersTable({
     setNameEmployee,
     setSurnameEmployee,
     setPositionEmployee,
+    addEmployee,
   } = useActions();
-  let rows: (IRow | ICreateButtonRow)[] = [];
+  let rows: (IRow | ICreateRowPanel)[] = [];
   checkedCompanies.forEach((company: ICompany) => {
     rows.push({
       id: `${company.id}`,
@@ -72,9 +73,27 @@ export default function WorkersTable({
           toggleCheckedEmployee(employee);
         },
       });
-      const createButtonRow: ICreateButtonRow = { createButtonText: "sdf" };
-      rows.push(createButtonRow);
     });
+    //Этот объект создан только для того, чтобы извлечь все свойства интерфейса сотрудника в массив
+    const dumpEmployee: IEmployee = {
+      companyId: 0,
+      id: 0,
+      name: "",
+      surname: "",
+      position: "",
+    };
+    // Удаляем ненужные поля из объекта, например поле companyId никак не может быть инициализированно через панель создания строк(т.к. пользователь не знает этого значения), поэтому её мы удаляем.
+    const { companyId, id, ...dumpEmployeeWithNeededProperties } = dumpEmployee;
+    const employeeProperties = Object.keys(dumpEmployeeWithNeededProperties);
+
+    const createRowButton: ICreateRowPanel = {
+      properties: employeeProperties,
+      onSubmit: (data) => {
+        addEmployee({ companyId: company.id, ...data });
+      },
+      submitPanelButtonText: "Создать сотрудника",
+    };
+    rows.push(createRowButton);
   });
   return (
     <Table

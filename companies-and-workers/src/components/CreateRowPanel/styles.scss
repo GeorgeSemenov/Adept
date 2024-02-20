@@ -1,0 +1,17 @@
+.table__create-row-panel {
+  text-align: center;
+  margin-bottom: 15px;
+
+  .table__create-row-panel-input {
+    margin: 5px;
+  }
+
+  .table__create-row-panel-inputs-wrapper {
+    text-align: left;
+  }
+
+  &-error-message {
+    color: red;
+    margin: 5px 0;
+  }
+}

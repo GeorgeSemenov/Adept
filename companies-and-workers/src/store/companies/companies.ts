@@ -9,14 +9,14 @@ export const companies = createSlice({
     addCompany: (
       state: ICompany[],
       {
-        payload: { companyName, companyAddress },
-      }: { payload: { companyName: string; companyAddress: string } }
+        payload: { name, adress },
+      }: { payload: { name: string; adress: string } }
     ) => {
       const lastId = state[state.length - 1].id;
       const newCompany: ICompany = {
-        adress: companyAddress,
+        adress: adress,
         id: lastId + 1,
-        name: companyName,
+        name: name,
         staff: [],
       };
       state.push(newCompany);
@@ -66,20 +66,20 @@ export const companies = createSlice({
     addEmployee: (
       state: ICompany[],
       {
-        payload: { companyID, name, surname, position },
+        payload: { companyId, name, surname, position },
       }: {
         payload: {
-          companyID: number;
+          companyId: number;
           name: string;
           surname: string;
           position: string;
         };
       }
     ) => {
-      const staff = findRightCompanyById(state, companyID).staff;
+      const staff = findRightCompanyById(state, companyId).staff;
       const lastId = staff[staff.length - 1].id;
       const newEmployee: IEmployee = {
-        companyId: companyID,
+        companyId: companyId,
         id: lastId + 1,
         name: name,
         surname: surname,
