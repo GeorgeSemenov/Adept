@@ -5,6 +5,8 @@ import Row from "../Row/indext";
 import "./styles.scss";
 import { ICreateRowPanel, IRow, isIRow } from "../../interfaces";
 import CreateRowPanel from "../CreateRowPanel";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Table({
   title,
@@ -20,13 +22,18 @@ export default function Table({
   onChange?: (arg?: boolean) => void;
 }) {
   const [isChecked, setIsChecked] = useState(false);
+  let [isAllRowsChecked, setIsAllRowsChecked] = useState(false);
+  let [isOneRowChecked, setIsOneRowChecked] = useState(false);
   useEffect(() => {
     if (!rows.length) {
       setIsChecked(false);
     } else {
-      setIsChecked(isAllRowsChecked(rows));
+      const dumbObj = isAllOrOneRowsChecked(rows);
+      setIsAllRowsChecked(dumbObj.isAllRowsChecked);
+      setIsOneRowChecked(dumbObj.isOneRowChecked);
+      setIsChecked(isAllRowsChecked);
     }
-  }, [rows]);
+  }, [rows, isAllRowsChecked]);
   return (
     <div
       className={`table ${className}`}
@@ -48,6 +55,14 @@ export default function Table({
           }
           label="Выделить всё"
         />
+        <IconButton
+          aria-label="delete"
+          size="large"
+          disabled={!isOneRowChecked}
+          color="primary"
+        >
+          <DeleteIcon fontSize="inherit" />
+        </IconButton>
       </div>
       <ul className="table__rows">
         {rows.map((row, index) => {
@@ -62,13 +77,28 @@ export default function Table({
   );
 }
 
-function isAllRowsChecked(rows: (IRow | ICreateRowPanel)[]) {
-  let isAllRChecked = true;
+function isAllOrOneRowsChecked(rows: (IRow | ICreateRowPanel)[]) {
+  let isAllRowsChecked = true;
+  let isOneRowChecked = false;
   for (const row of rows) {
+    if (!isIRow(row)) {
+      continue;
+    }
+    if (row.isListHead) {
+      continue;
+    }
     if (!row.isChecked) {
-      isAllRChecked = false;
+      isAllRowsChecked = false;
+    }
+    if (row.isChecked) {
+      isOneRowChecked = true;
+    }
+    if (!isAllRowsChecked && isOneRowChecked) {
       break;
     }
   }
-  return isAllRChecked;
+  return {
+    isAllRowsChecked: isAllRowsChecked,
+    isOneRowChecked: isOneRowChecked,
+  };
 }

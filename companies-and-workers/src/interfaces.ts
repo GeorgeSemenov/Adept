@@ -20,7 +20,6 @@ export interface ICreateRowPanel {
   properties: string[];
   submitPanelButtonText: string;
   onSubmit: (obj?: any) => void;
-  isChecked?: boolean;
 }
 
 export interface IActiveTables {

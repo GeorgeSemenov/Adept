@@ -52,16 +52,20 @@ function CreateRowForm({
     useState<boolean>(false);
   return (
     <form
-      onSubmit={() => {
-        setIsFormInfoObjHaveEmptyFields(false);
-        for (const field of formInfoObj) {
-          if (!field.trim()) {
-            setIsFormInfoObjHaveEmptyFields(true);
+      onSubmit={(e) => {
+        e.preventDefault();
+        let isInfoObjectEmpty = false;
+        for (const property of properties) {
+          if (!formInfoObj[property]?.trim()) {
+            isInfoObjectEmpty = true;
+            break;
           }
         }
-        if (!isFormInfoObjHaveEmptyFields) {
+        if (!isInfoObjectEmpty) {
           onSubmit(formInfoObj);
           setIsCreatePanelOpen(false);
+        } else {
+          setIsFormInfoObjHaveEmptyFields(true);
         }
       }}
     >

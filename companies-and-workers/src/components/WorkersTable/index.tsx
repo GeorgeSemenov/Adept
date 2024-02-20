@@ -24,13 +24,8 @@ export default function WorkersTable({
   checkedCompanies.forEach((company: ICompany) => {
     rows.push({
       id: `${company.id}`,
-      properties: [
-        { value: company.name },
-        { value: `${company.staff.length} сотрудников` },
-        { value: company.adress },
-      ],
+      properties: [{ value: company.name }],
       isListHead: true,
-      isChecked: true,
     });
 
     company.staff.forEach((employee: IEmployee) => {
@@ -95,7 +90,7 @@ export default function WorkersTable({
     };
     rows.push(createRowButton);
   });
-  return (
+  return checkedCompanies.length ? (
     <Table
       className={className}
       onClick={() => {
@@ -109,5 +104,7 @@ export default function WorkersTable({
       title="Список сотрудников"
       rows={rows}
     />
+  ) : (
+    <></>
   );
 }

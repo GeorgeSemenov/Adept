@@ -13,6 +13,10 @@
     justify-content: center;
   }
 
+  &_theme_checked {
+    background-color: $table__row_theme_checked--BGColor;
+  }
+
   &-data {
     display: flex;
     justify-content: flex-start;

@@ -13,6 +13,7 @@ export default function Row({
   onChange = () => {},
 }: IRow) {
   className += isListHead ? "table__row_theme_head-list" : "";
+  className += isChecked && !isListHead ? "table__row_theme_checked" : "";
   return (
     <li className={`table__row ${className}`}>
       {!isListHead && (

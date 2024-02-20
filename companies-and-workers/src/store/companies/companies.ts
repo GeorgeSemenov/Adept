@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ICompany, IEmployee } from "../../interfaces";
 import companiesInitialValue from "../../db";
 
+const defaultFirsId = 1; //С этого значения начинают id для компаний и сотрудников
+
 export const companies = createSlice({
   name: "companies",
   initialState: companiesInitialValue.companies,
@@ -12,7 +14,7 @@ export const companies = createSlice({
         payload: { name, adress },
       }: { payload: { name: string; adress: string } }
     ) => {
-      const lastId = state[state.length - 1].id;
+      const lastId = state.length ? state[state.length - 1].id : defaultFirsId;
       const newCompany: ICompany = {
         adress: adress,
         id: lastId + 1,
@@ -77,7 +79,7 @@ export const companies = createSlice({
       }
     ) => {
       const staff = findRightCompanyById(state, companyId).staff;
-      const lastId = staff[staff.length - 1].id;
+      const lastId = staff.length ? staff[staff.length - 1].id : defaultFirsId;
       const newEmployee: IEmployee = {
         companyId: companyId,
         id: lastId + 1,
