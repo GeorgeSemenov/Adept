@@ -1,6 +1,6 @@
 import React from "react";
 import Table from "../Table";
-import { ICompany, IRow } from "../../interfaces";
+import { ICompany, ICreateRowPanel, IEmployee, IRow } from "../../interfaces";
 import { useActions } from "../../hooks/useActions";
 
 export default function WorkersTable({
@@ -18,21 +18,30 @@ export default function WorkersTable({
     setNameEmployee,
     setSurnameEmployee,
     setPositionEmployee,
+    addEmployee,
+    removeCheckedWorkers,
   } = useActions();
-  let rows: IRow[] = [];
-  checkedCompanies.forEach((company) => {
+  let rows: (IRow | ICreateRowPanel)[] = [];
+  checkedCompanies.forEach((company: ICompany) => {
     rows.push({
       id: `${company.id}`,
-      properties: [
-        { value: company.name },
-        { value: `${company.staff.length} сотрудников` },
-        { value: company.adress },
-      ],
+      properties: [{ value: company.name }],
       isListHead: true,
-      isChecked: true,
     });
 
-    company.staff.forEach((employee) =>
+    if (!company.staff.length) {
+      rows.push({
+        id: `${company.id}.0`,
+        properties: [
+          {
+            value: `В данной компании пока нет ни одного сотрудника.`,
+          },
+        ],
+        isListHead: true,
+      });
+    }
+
+    company.staff.forEach((employee: IEmployee) => {
       rows.push({
         id: `${company.id}.${employee.id}`,
         properties: [
@@ -71,12 +80,35 @@ export default function WorkersTable({
         onChange: () => {
           toggleCheckedEmployee(employee);
         },
-      })
-    );
+      });
+    });
+    //Этот объект создан только для того, чтобы извлечь все свойства интерфейса сотрудника в массив
+    const dumpEmployee: IEmployee = {
+      companyId: 0,
+      id: 0,
+      name: "",
+      surname: "",
+      position: "",
+    };
+    // Удаляем ненужные поля из объекта, например поле companyId никак не может быть инициализированно через панель создания строк(т.к. пользователь не знает этого значения), поэтому её мы удаляем.
+    const { companyId, id, ...dumpEmployeeWithNeededProperties } = dumpEmployee;
+    const employeeProperties = Object.keys(dumpEmployeeWithNeededProperties);
+
+    const createRowButton: ICreateRowPanel = {
+      properties: employeeProperties,
+      onSubmit: (data) => {
+        addEmployee({ companyId: company.id, ...data });
+      },
+      submitPanelButtonText: "Создать сотрудника",
+    };
+    rows.push(createRowButton);
   });
-  return (
+  return checkedCompanies.length ? (
     <Table
       className={className}
+      onRemove={() => {
+        removeCheckedWorkers();
+      }}
       onClick={() => {
         onClick();
       }}
@@ -88,5 +120,7 @@ export default function WorkersTable({
       title="Список сотрудников"
       rows={rows}
     />
+  ) : (
+    <></>
   );
 }

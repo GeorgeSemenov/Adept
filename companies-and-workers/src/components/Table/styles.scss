@@ -6,6 +6,7 @@
   border-color: transparent;
   border-width: 1px;
   border-style: solid;
+  flex-basis: 50%;
 
   &__title {
     text-align: center;
@@ -17,7 +18,18 @@
     border-bottom-width: 3px;
     border-bottom-color: $table__header--BorderBottom;
     margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
   }
+
+  &__rows {
+    padding: 0;
+  }
+
+  &__rows > li {
+    list-style-type: none;
+  }
+
   &.active {
     border-radius: 10px 0 0 10px;
     border-color: $table-active--Border;

@@ -13,8 +13,9 @@ export default function Row({
   onChange = () => {},
 }: IRow) {
   className += isListHead ? "table__row_theme_head-list" : "";
+  className += isChecked && !isListHead ? "table__row_theme_checked" : "";
   return (
-    <div className={`table__row ${className}`}>
+    <li className={`table__row ${className}`}>
       {!isListHead && (
         <Checkbox
           checked={isChecked}
@@ -29,14 +30,14 @@ export default function Row({
           <RowProperty {...prop} key={key} />
         ))}
       </div>
-    </div>
+    </li>
   );
 }
 
-function RowProperty({ value, func, key }: IRowProperty) {
+function RowProperty({ value, func }: IRowProperty) {
   const [isEditing, setIsEditing] = useState(false);
   return (
-    <span key={key} className="table__row-property-container">
+    <span className="table__row-property-container">
       {isEditing ? (
         <EditPropertyForm
           onSubmit={(inputValue) => {
@@ -50,7 +51,6 @@ function RowProperty({ value, func, key }: IRowProperty) {
       ) : func ? (
         <Button
           className="table__row-property-name-button"
-          key={key}
           variant="outlined"
           onClick={() => {
             setIsEditing(true);
@@ -59,9 +59,7 @@ function RowProperty({ value, func, key }: IRowProperty) {
           {value}
         </Button>
       ) : (
-        <span key={key} className="table__row-data-text">
-          {value}
-        </span>
+        <span className="table__row-data-text">{value}</span>
       )}
     </span>
   );

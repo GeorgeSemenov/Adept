@@ -2,10 +2,30 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ICompany, IEmployee } from "../../interfaces";
 import companiesInitialValue from "../../db";
 
+const defaultFirsId = 1; //С этого значения начинают id для компаний и сотрудников
+
 export const companies = createSlice({
   name: "companies",
   initialState: companiesInitialValue.companies,
   reducers: {
+    removeCheckedCompanies: (state: ICompany[]) => {
+      return state.filter((company) => !company.isChecked);
+    },
+    addCompany: (
+      state: ICompany[],
+      {
+        payload: { name, adress },
+      }: { payload: { name: string; adress: string } }
+    ) => {
+      const lastId = state.length ? state[state.length - 1].id : defaultFirsId;
+      const newCompany: ICompany = {
+        adress: adress,
+        id: lastId + 1,
+        name: name,
+        staff: [],
+      };
+      state.push(newCompany);
+    },
     setCheckStatusAllCompanies: (
       state: ICompany[],
       { payload: checkStatus }: { payload: boolean }
@@ -47,6 +67,40 @@ export const companies = createSlice({
       );
       state[companyIndex].staff[employeeIndex].isChecked =
         !state[companyIndex].staff[employeeIndex].isChecked;
+    },
+    removeCheckedWorkers: (state: ICompany[]) => {
+      state.forEach((company) => {
+        if (company.isChecked) {
+          company.staff = company.staff.filter(
+            (employee) => !employee.isChecked
+          );
+        }
+      });
+      return state;
+    },
+    addEmployee: (
+      state: ICompany[],
+      {
+        payload: { companyId, name, surname, position },
+      }: {
+        payload: {
+          companyId: number;
+          name: string;
+          surname: string;
+          position: string;
+        };
+      }
+    ) => {
+      const staff = findRightCompanyById(state, companyId).staff;
+      const lastId = staff.length ? staff[staff.length - 1].id : defaultFirsId;
+      const newEmployee: IEmployee = {
+        companyId: companyId,
+        id: lastId + 1,
+        name: name,
+        surname: surname,
+        position: position,
+      };
+      staff.push(newEmployee);
     },
     setNameEmployee: (
       state: ICompany[],
